@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>listen</title>
+	<style type="text/css">
+		.hover-delay {
+			width: 100px;
+			height: 100px;
+			background: tan;
+			margin: auto;
+			opacity: 1;
+			padding: 10px;
+			transition: opacity 0s 1s steps(1, end);
+		}
+		.hover-delay:hover {
+			opacity: 0.99;
+		}
+		.popup-box {
+			position: relative;
+			display: inline-block;
+		}
+		.popup {
+			position: absolute;
+			width: 100px;
+			height: 135px;
+			border-radius: 5px;
+			opacity: 0;
+			display: none;
+			background: #fff;
+			border: 1px solid #c9c9c9;
+			transform: translateY(0px);
+			transition: 500ms;
+			box-shadow: 2px 3px 2px 0px #d3d3d3;
+		}
+		.popup.show {
+			opacity: 1;
+			transform: translateY(10px);
+		}
+	</style>
+</head>
+<body>
+	<div class="hover-delay">hover the element and trigger a event after 1s</div>
+	<!--
+		鼠标hover之后快速移开(1s之内)，目标元素的opacity变成了1，此时会先触发transitioncancel，
+		然后是新的一轮渐变transitionstart->transitionend
+
+		但是会触发transitioncancel事件
+		当以下情况时，过渡被取消，触发transitioncancel事件：
+		1.应用于目标的transition-property属性的值被更改
+		2.display属性被设置为"none"。
+		3.转换在运行到完成之前就停止了，例如通过将鼠标移出悬浮过渡元素。
+	-->
+	<script type="text/javascript">
+		function $(selector) {
+			return document.querySelector(selector);
+		}
+		function bindEvent(dom, eventType, handler) {
+			dom.addEventListener(eventType, handler, false);
+		}
+		const hoverDelayEle = $('.hover-delay');
+		bindEvent(hoverDelayEle, 'transitionend', (e) => {
+			const opacity = getComputedStyle(e.target).getPropertyValue('opacity')
+			if (opacity == 0.99) {
+				console.log('trigger');
+			} else {
+				console.log('transitionend');
+			}
+		});
+		bindEvent(hoverDelayEle, 'transitionstart', () => {
+			console.log('transitionstart');
+		});
+		bindEvent(hoverDelayEle, 'transitioncancel', () => {
+			console.log('transitioncancel');
+		});
+	</script>
+	<div class="popup-box" tabindex="-1">
+		<input class="z-input" />
+		<div class="popup" />
+	</div>
+	<script type="text/javascript">
+		const inputEle = $('.z-input');
+		const popupEle = $('.popup');
+
+		bindEvent(inputEle, 'click', () => {
+			if (!popupEle.classList.contains('show')) {
+				popupEle.style.display = 'block';
+				popupEle.clientHeight; // 强制浏览器重排获得新的尺寸信息
+				popupEle.classList.add('show');
+			} else {
+				popupEle.classList.remove('show');
+			}
+		});
+		bindEvent(inputEle, 'blur', () => {
+			if (popupEle.classList.contains('show')) {
+				popupEle.classList.remove('show');
+			}
+		});
+		bindEvent(popupEle, 'transitionend', (e) => {
+			if (!e.target.classList.contains('show')) {
+				popupEle.style.display = 'none';
+			}
+		});
+	</script>
+	<p>12345</p>
+	<!--https://juejin.cn/post/7062507282046648357-->
+
+</body>
+</html>

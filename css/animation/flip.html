@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>flip</title>
+	<style type="text/css">
+		#flip {
+			width: 400PX;
+			min-height: 100px;
+			border: 1px solid tan;
+			margin: auto;
+		}
+		.btn-group {
+			text-align: center;
+			margin-bottom: 20PX;
+		}
+		.card {
+			width: 100PX;
+			height: 100PX;
+			background: pink;
+			display: inline-block;
+			text-align: center;
+			line-height: 100px;
+			margin: 5px;
+			box-sizing: border-box;
+		}
+	</style>
+</head>
+<body>
+	<div class="btn-group">
+		<button id="btn-add-card">add</button>
+		<button id="btn-delete-card">delete</button>
+	</div>
+	<div id="flip"></div>
+</body>
+<script type="text/javascript">
+	function flushAnimation(animQueue) {
+		animQueue.forEach(({ node, rawX, rawY }) => {
+			const { x: lastX, y: lastY } = node.getBoundingClientRect();
+			node.animate([
+				{transform: `translate(${rawX - lastX}px, ${rawY - lastY}px)`},
+				{transform: 'none'},
+			], {
+				duration: 500,
+				easing: 'linear',
+			});
+		});
+	}
+	function bindEvent(dom, eventType, handler) {
+		dom.addEventListener(eventType, handler, false);
+	}
+	function $(selector) {
+		return document.querySelector(selector);
+	}
+	function walk(node, callback) {
+		while(node) {
+			callback(node);
+			node = node.nextSibling;
+		}
+	}
+	function gatherRawPos(anchorNode) {
+		const posQueue = [];
+		walk(anchorNode, (node) => {
+			const { x, y } = node.getBoundingClientRect();
+			posQueue.push({
+				node,
+				rawX: x,
+				rawY: y,
+			});
+		});
+		return posQueue;
+	}
+	const getFilpContainer = (function() {
+		let containerNode;
+		return () => {
+			if (!containerNode) {
+				containerNode = $('#flip');
+			}
+			return containerNode;
+		};
+	})();
+	function getAnimateEffectOptions() {
+		return {
+			easing: 'linear',
+			duration: 500,
+		};
+	}
+	function createElement(type, attrs) {
+		const newEle = document.createElement(type);
+		Object.entries(attrs).forEach(([k, v]) => {
+			newEle[k] = v;
+		});
+		return newEle;
+	}
+	function bindAddEvent() {
+		let count = 1;
+		bindEvent($('#btn-add-card'), 'click',function() {
+			const animQueue = gatherRawPos(getFilpContainer().firstElementChild);
+			const newCardNode = createElement('div', { className: 'card', textContent: count });
+			count++;
+
+			getFilpContainer().insertBefore(newCardNode, getFilpContainer().firstElementChild);
+
+			newCardNode.animate([
+				{ opacity: 0, transform: 'scale(0)' },
+				{ opacity: 1, transform: 'none' },
+			], getAnimateEffectOptions());
+
+			flushAnimation(animQueue);
+		});
+		
+	}
+	function bindDeleteEvent() {
+		bindEvent($('#btn-delete-card'), 'click', function() {
+			const deleteNode = getFilpContainer().firstElementChild;
+			if (!deleteNode) {
+				return;
+			}
+			const animQueue = gatherRawPos(deleteNode.nextSibling);
+
+			deleteNode.animate([
+				{ opacity: 1, transform: 'scale(1)' },
+				{ opacity: 0, transform: 'scale(0)' },
+			], getAnimateEffectOptions());
+
+			setTimeout(() => {
+				getFilpContainer().removeChild(deleteNode);
+				flushAnimation(animQueue);
+			}, 450);
+		});
+	}
+	function onReady() {
+		bindAddEvent();
+		bindDeleteEvent();
+	}
+
+	bindEvent(document, 'DOMContentLoaded', onReady);
+</script>
+</html>

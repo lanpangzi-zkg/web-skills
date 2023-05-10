@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>clock</title>
+	<style type="text/css">
+		* {
+			margin: 0;
+			padding: 0;
+		}
+		body {
+			height: 100vh;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		.number-box {
+			width: 60px;
+			height: 100px;
+			position: relative;
+		}
+		.number-box .line {
+			position: absolute;
+			background: red;
+			transition: all 200ms linear;
+		}
+		.number-box .line:nth-child(1) {
+			top: 0;
+			left: var(--gap);
+			right: var(--gap);
+			height: 1px;
+		}
+		.number-box .line:nth-child(2) {
+			top: var(--gap);
+			right: 0;
+			width: 1px;
+			bottom: calc(50px + var(--gap));
+		}
+		.number-box .line:nth-child(3) {
+			top: calc(50px + var(--gap));
+			right: 0;
+			width: 1px;
+			bottom: var(--gap);
+		}
+		.number-box .line:nth-child(4) {
+			bottom: 0;
+			height: 1px;
+			left: var(--gap);
+			right: var(--gap);
+		}
+		.number-box .line:nth-child(5) {
+			left: 0;
+			width: 1px;
+			top: calc(50px + var(--gap));
+			bottom: var(--gap);
+		}
+		.number-box .line:nth-child(6) {
+			top: var(--gap);
+			bottom: calc(50px + var(--gap));
+			left: 0;
+			width: 1px;
+		}
+		.number-box .line:nth-child(7) {
+			bottom: 50px;
+			left: var(--gap);
+			right: var(--gap);
+			height: 1px;
+		}
+		.number-box[data-digit="9"] .line:nth-child(5) {
+			bottom: calc(50px + var(--gap));
+		}
+
+		.number-box[data-digit="7"] .line:nth-child(4) {
+			left: calc(60px - var(--gap));
+		}
+		.number-box[data-digit="7"] .line:nth-child(5) {
+			bottom: calc(50px + var(--gap));
+		}
+		.number-box[data-digit="7"] .line:nth-child(6) {
+			bottom: calc(100px - var(--gap));
+		}
+		.number-box[data-digit="7"] .line:nth-child(7) {
+			left: calc(60px - var(--gap));
+		}
+
+		.number-box[data-digit="6"] .line:nth-child(2) {
+			bottom: calc(100px - var(--gap));
+		}
+
+		.number-box[data-digit="5"] .line:nth-child(2) {
+			bottom: calc(100px - var(--gap));
+		}
+		.number-box[data-digit="5"] .line:nth-child(5) {
+			bottom: calc(50px + var(--gap));
+		}
+
+		.number-box[data-digit="0"] .line:nth-child(7) {
+			left: calc(60px - var(--gap));
+		}
+
+		.number-box[data-digit="1"] .line:nth-child(1) {
+			left: calc(60px - var(--gap));
+		}
+		.number-box[data-digit="1"] .line:nth-child(7) {
+			left: calc(60px - var(--gap));
+		}
+		.number-box[data-digit="1"] .line:nth-child(4) {
+			left: calc(60px - var(--gap));
+		}
+		.number-box[data-digit="1"] .line:nth-child(5) {
+			bottom: calc(50px + var(--gap));
+		}
+		.number-box[data-digit="1"] .line:nth-child(6) {
+			bottom: calc(100px - var(--gap));
+		}
+
+		.number-box[data-digit="2"] .line:nth-child(3) {
+			top: calc(100px - var(--gap));
+		}
+		.number-box[data-digit="2"] .line:nth-child(6) {
+			bottom: calc(100px - var(--gap));
+		}
+
+		.number-box[data-digit="3"] .line:nth-child(5) {
+			bottom: calc(50px + var(--gap));
+		}
+		.number-box[data-digit="3"] .line:nth-child(6) {
+			bottom: calc(100px - var(--gap));
+		}
+
+		.number-box[data-digit="4"] .line:nth-child(1) {
+			left: calc(60px - var(--gap));
+		}
+		.number-box[data-digit="4"] .line:nth-child(4) {
+			left: calc(60px - var(--gap));
+		}
+		.number-box[data-digit="4"] .line:nth-child(5) {
+			bottom: calc(50px + var(--gap));
+		}
+		.number-box + .number-box {
+			margin-left: 20px;
+		}
+		.colon {
+			margin: 0 20px;
+			color: red;
+		}
+	</style>
+</head>
+<body>
+	<div class="number-box" style="--gap:2px;" data-digit="0">
+		<div class="line"></div>
+		<div class="line"></div>
+		<div class="line"></div>
+		<div class="line"></div>
+		<div class="line"></div>
+		<div class="line"></div>
+		<div class="line"></div>
+	</div>
+	<div class="number-box" style="--gap:2px;" data-digit="0">
+		<div class="line"></div>
+		<div class="line"></div>
+		<div class="line"></div>
+		<div class="line"></div>
+		<div class="line"></div>
+		<div class="line"></div>
+		<div class="line"></div>
+	</div>
+	<div class="colon">:</div>
+	<div class="number-box" style="--gap:2px;" data-digit="0">
+		<div class="line"></div>
+		<div class="line"></div>
+		<div class="line"></div>
+		<div class="line"></div>
+		<div class="line"></div>
+		<div class="line"></div>
+		<div class="line"></div>
+	</div>
+	<div class="number-box" style="--gap:2px;" data-digit="0">
+		<div class="line"></div>
+		<div class="line"></div>
+		<div class="line"></div>
+		<div class="line"></div>
+		<div class="line"></div>
+		<div class="line"></div>
+		<div class="line"></div>
+	</div>
+	<div class="colon">:</div>
+	<div class="number-box" style="--gap:2px;" data-digit="0">
+		<div class="line"></div>
+		<div class="line"></div>
+		<div class="line"></div>
+		<div class="line"></div>
+		<div class="line"></div>
+		<div class="line"></div>
+		<div class="line"></div>
+	</div>
+	<div class="number-box" style="--gap:2px;" data-digit="0">
+		<div class="line"></div>
+		<div class="line"></div>
+		<div class="line"></div>
+		<div class="line"></div>
+		<div class="line"></div>
+		<div class="line"></div>
+		<div class="line"></div>
+	</div>
+</body>
+<script type="text/javascript">
+	const digitNodes = Array.from(document.querySelectorAll('.number-box'));
+
+	setInterval(() => {
+		const d = new Date();
+		const { getHours, getMinutes, getSeconds } = Date.prototype;
+		const times = [getHours, getMinutes,getSeconds].reduce((arr, fn) => {
+			const s = String(fn.apply(d)).padStart(2, 0);
+			arr.push(...s.split(''));
+			return arr;
+		}, []);
+
+		digitNodes.forEach((node) => {
+			node.setAttribute('data-digit', times.shift());
+		});
+	}, 1000);
+</script>
+</html>

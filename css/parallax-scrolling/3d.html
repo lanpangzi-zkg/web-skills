@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>3d</title>
+	<style type="text/css">
+		.g-container {
+		    margin: auto;
+			padding: 120px 100px;
+			width: 320px;
+			overflow: auto;
+			height: 70vh;
+			perspective: 600px;
+		}
+		.g-box {
+		    height: 200px;
+		    background: #999;
+		    position: relative;
+    		z-index: 1;
+		    transform: translate3d(0, 0, 200px);
+		    transform-style: preserve-3d;
+		}
+		.g-box::before,
+		.g-box::after {
+	        content: "";
+	        position: absolute;
+	        right: 0;
+	        left: 0;
+	        transform-style: preserve-3d;
+	        height: 200px;
+	        background-color: #ccc;
+	        backface-visibility: visible;
+	    }
+		.g-box::before {
+	        transform-origin: top center;
+	        top: 0;
+	        transform: rotateX(-90deg);
+	    }
+		.g-box::after {
+	        transform-origin: bottom center;
+	        bottom: 0;
+	        transform: rotateX(90deg);
+	    }
+	    .g-normal {
+		    height: 200px;
+		    background: #666;
+		    transform-style: preserve-3d;
+		}
+	</style>
+</head>
+<body>
+	<div class="g-container">
+	    <div class="g-box"></div>
+	    <div class="g-normal"></div>
+	    <div class="g-box"></div>
+	    <div class="g-normal"></div>
+	    <div class="g-box"></div>
+	</div>
+</body>
+</html>

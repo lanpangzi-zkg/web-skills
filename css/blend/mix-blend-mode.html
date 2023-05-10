@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>mix-blend-mode</title>
+</head>
+<style type="text/css">
+	.css-1ab1jlb {
+	    position: relative;
+	    display: flex;
+	    flex-direction: column;
+	    width: 1200px;
+    	margin: auto;
+	}
+	.css-1dfydmk {
+	    position: absolute;
+	    inset: 1px;
+	    width: calc(100% - 2px);
+	    height: calc(100% - 2px);
+	    pointer-events: none;
+	    object-fit: cover;
+	}
+	.css-od9hwu {
+	    text-align: center;
+	    padding: 10px;
+	    background: white;
+	    mix-blend-mode: lighten;
+	    font-size: 150px;
+	    font-weight: 900;
+	    line-height: 0.9;
+	    align-self: stretch;
+	}
+	.demo {
+		width: 1200px;
+		margin: 20px auto;
+		display: flex;
+		justify-content: center;
+		background: linear-gradient(90deg, red, blue);
+	}
+	.demo span {
+		background: white;
+		mix-blend-mode: lighten;
+	    font-size: 150px;
+	    font-weight: 900;
+	    flex: 1;
+    	text-align: center;
+	}
+</style>
+<body>
+	<!-- <p><a href="https://builder.io/fiddle/71563ce969894f2781fa450fc6964a40">https://builder.io/fiddle/71563ce969894f2781fa450fc6964a40</a></p> -->
+	<div class="css-1ab1jlb">
+		<video autoplay="" playsinline="" loop="" class="css-1dfydmk">
+			<source src="https://cdn.builder.io/o/assets%2F63f829e0e7a44824a11461f3037b38ed%2F321eda8b91344a349a2fe52c1400c348%2Fcompressed?apiKey=63f829e0e7a44824a11461f3037b38ed&amp;token=321eda8b91344a349a2fe52c1400c348&amp;alt=media&amp;optimized=true" type="video/mp4">
+		</video>
+		<div class="css-od9hwu">So Cool!</div>
+	</div>
+	<div class="demo">
+		<span>So Cool!</span>
+	</div>
+</body>
+</html>
