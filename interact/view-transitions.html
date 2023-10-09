@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>view-transitions</title>
+	<style type="text/css">
+		* {
+			margin: 0;
+			padding: 0;
+		}
+		section {
+			margin-inline: auto;
+			text-align: center;
+			width: 60vw;
+		}
+		section main .box {
+			background: tan;
+			height: 30vh;
+			display: grid;
+			place-items: center;
+			font-size: 30px;
+		}
+		section main .box.b-2 {
+			background: gray;
+		}
+		section .btn-toggle {
+			margin-block: 10px;
+		}
+	</style>
+</head>
+<body>
+	<section>
+		<h3>cross-fade</h3>
+		<main>
+			<div class="box b-1">1</div>
+		</main>
+		<button class="btn-toggle">toggle by default</button>
+		<button class="btn-toggle view-transition">toggle with view-transition</button>
+	</section>
+</body>
+<script type="text/javascript">
+	!function(){
+		function toggleDom(e) {
+			const mainNode = e.target.parentNode.querySelector('main');
+			const newChildNode = document.createElement('div');
+			const firstChildNode = mainNode.firstElementChild;
+			const isBox1 = firstChildNode.classList.contains('b-1');
+			newChildNode.className = `box b-${isBox1 ? '2' : '1'}`;
+			newChildNode.textContent = isBox1 ? 2 : 1;
+			mainNode.removeChild(firstChildNode);
+			mainNode.appendChild(newChildNode);
+		}
+		document.body.addEventListener('click', (e) => {
+			if (e.target.classList.contains('btn-toggle')) {
+				if (e.target.classList.contains('view-transition')) {
+					document.startViewTransition(() => toggleDom(e));
+					return;
+				}
+				toggleDom(e);
+			}
+		}, false);
+		console.log('https://developer.chrome.com/docs/web-platform/view-transitions/');
+	}();
+</script>
+</html>
