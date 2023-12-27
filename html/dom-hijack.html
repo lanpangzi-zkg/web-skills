@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>dom-hijack</title>
+</head>
+<body>
+	<h2>Feedback Form</h2>
+	<form>
+	  <label for="name">Name:</label><br>
+	  <input type="text" id="name" name="name"><br>
+	  <label for="feedback">Feedback:</label><br>
+	  <textarea id="feedback" name="feedback"></textarea><br>
+	  <input type="submit" value="Submit">
+	</form>
+
+	<div id="feedbackDisplay"></div>
+</body>
+<script type="text/javascript">
+	document.querySelector('form').onsubmit = function(event) {
+	    event.preventDefault();
+
+	    let name = document.getElementById('name').value;
+	    let feedback = document.getElementById('feedback').value;
+
+	    feedbackDisplay.innerHTML = `<p><b>${name}</b>: ${feedback}</p>`;
+	};
+	// <img onerror="feedbackDisplay= { set innerHTML(a) { console.log(1111);window.location.href='https://www.baidu.com/' } };" src=X style="width:0;height:0">
+
+	// https://mp.weixin.qq.com/s/GQ8NctEspp67UF_s96WRAw
+	// 文章中劫持feedbackDisplay的方式没有效果，改用img+onerror才行
+</script>
+</html>

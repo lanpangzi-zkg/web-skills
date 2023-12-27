@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>mask</title>
+	<style type="text/css">
+		body {
+			height: 100vh;
+			display: grid;
+			place-items: center;
+		}
+		.box {
+			width: 200px;
+			aspect-ratio: 2;
+			border-radius: 8px;
+			box-sizing: border-box;
+			background: linear-gradient(85deg, #FF9078 7.57%, #FA3440 80.06%);
+			-webkit-mask-composite: xor;
+		}
+		.wrapper {
+			display: flex;
+			gap: 10px;
+		}
+		.b-1 {
+			-webkit-mask: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='50' cy='50' r='50'/%3E%3C/svg%3E") 50% / 50% no-repeat;
+		}
+		.b-2 {
+			-webkit-mask: radial-gradient(circle at center, red 70%, transparent 0) 50% / 50% no-repeat;
+		}
+		.b-3 {
+			-webkit-mask: url("data:image/svg+xml,%3Csvg width='20' height='48' viewBox='0 0 20 48' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M0 48V0c0 2.21 1.809 3.958 3.974 4.395C13.116 6.238 20 14.315 20 24S13.116 41.762 3.974 43.605C1.81 44.042 0 45.791 0 48z' fill='%23000'/%3E%3C/svg%3E") 0 50%/20px no-repeat,
+    url("data:image/svg+xml,%3Csvg width='20' height='48' viewBox='0 0 20 48' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M20 48V0c0 2.209-1.809 3.959-3.975 4.395C6.885 6.238 0 14.315 0 24s6.885 17.762 16.025 19.605C18.191 44.041 20 45.791 20 48z' fill='%23000'/%3E%3C/svg%3E") 100% 50%/20px no-repeat,
+    linear-gradient(blue 0 0);
+		}
+		.b-4 {
+			-webkit-mask: linear-gradient(#0000, #0000);
+			padding: 10px;
+			border: 10px solid blue;
+			-webkit-mask-clip: padding-box;
+		}
+	</style>
+</head>
+<body>
+	<div class="wrapper">
+		<div class="box b-1"></div>
+		<div class="box b-2"></div>
+		<div class="box b-3">
+			<!-- 左右两边各一个半圆，再加一个线性渐变平铺的mask，取这三个mask都不重叠的部分，最后就是卡券的效果 -->
+		</div>
+		<div class="box b-4"></div>
+	</div>
+</body>
+</html>

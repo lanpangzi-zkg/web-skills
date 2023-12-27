@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>html实体</title>
+	<style type="text/css">
+		.raw {
+			background: tan;
+			color: #fff;
+		}
+	</style>
+</head>
+<body>
+	<p>实体以&开头，分为命名和数字实体，通常用来表示那些有特殊含义(如&it;)和那些不能从键盘获得的特殊字符</p>
+	<p>实体往往分号结尾，但是最初的实体没有很多，省略分号浏览器也可以解析，而现代浏览器都保存了这一行为</p>
+	<h3>命名实体</h3>
+	&gt&lt;&ltcc;&copy;
+
+	<h3>数字实体，以&#十(六)进制形式组成，以【;】结尾</h3>
+	<p><span id="a" class="raw"></span> = &#60;</p>
+	<p><span id="b" class="raw"></span> = &#x3c;</p>
+</body>
+<script type="text/javascript">
+	a.textContent = '&#60;';
+	b.textContent = '&#x3c;';
+</script>
+</html>

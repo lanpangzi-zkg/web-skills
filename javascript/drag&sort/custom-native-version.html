@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>drag&sort</title>
+	<style type="text/css">
+		:root {
+			--background: #EDEEF7;
+		}
+		* {
+			margin: 0;
+			padding: 0;
+		}
+		body {
+			height: 100vh;
+			display: grid;
+			place-items: center;
+			background: var(--background);
+		}
+		.list {
+			display: grid;
+			gap: 10px;
+			padding: 10px;
+			--duration: 100ms;
+		}
+		.list .item {
+			height: 50px;
+			line-height: 50px;
+			text-align: center;
+			background: #fff;
+			min-width: 200px;
+			border-radius: 5px;
+			cursor: move;
+			user-select: none;
+			will-change: transform;
+			transition: transform var(--duration) linear;
+			transform: translate(var(--x, 0px), var(--y, 0px));
+		}
+		.list .item.drag {
+			opacity: 0.75;
+			background: tan;
+			z-index: 1;
+			position: relative;
+			transition-duration: 0ms;
+		}
+	</style>
+</head>
+<body>
+	<div class="list">
+		<div class="item">item 1</div>
+		<div class="item">item 2</div>
+		<div class="item">item 3</div>
+		<div class="item">item 4</div>
+	</div>
+</body>
+<script type="text/javascript">
+	!function() {
+		function normalizeNumberValue(el, propertyValue) {
+			return parseFloat(getComputedStyle(el).getPropertyValue(propertyValue) || 0);
+		}
+
+		const ratio = 0.3;
+		const list = document.querySelector('.list');
+		const gap = normalizeNumberValue(list, 'gap');
+		const listTop = list.getBoundingClientRect().top;
+		let items = list.querySelectorAll('.item');
+		const itemHeight = items[0].getBoundingClientRect().height;
+
+		items.forEach((node) => {
+			let isPress = false;
+			let startX;
+			let startY;
+			let prevDragIndex = -1;
+			let dragIndex = -1;
+			let rawNodeIndex = -1;
+			function updateTranslateVars(target, x, y) {
+				target.style.setProperty('--x', `${x}px`);
+				target.style.setProperty('--y', `${y}px`);
+			}
+
+			function stopDrag(e) {
+				if (isPress) {
+					isPress = false;
+					if (dragIndex != rawNodeIndex) {
+						updateTranslateVars(e.target, 0, (dragIndex - rawNodeIndex) * (itemHeight + gap));
+						e.target.addEventListener('transitionend', () => {
+							list.style.setProperty('--duration', '0ms');
+							list.insertBefore(e.target, rawNodeIndex > dragIndex ? items[dragIndex] : items[dragIndex + 1]);
+							items.forEach((node) => {
+								updateTranslateVars(node, 0, 0);
+							});
+
+						}, { once: true, capture: false });
+
+					} else {
+						updateTranslateVars(e.target, 0, 0);
+					}
+					e.target.classList.toggle('drag');
+				}
+			}
+
+			function getNodeVerticalPos(node) {
+				const { y, bottom } = node.getBoundingClientRect();
+				const transformY = normalizeNumberValue(node, '--y');
+				return {
+					y,
+					bottom,
+					rawY: y - transformY,
+					rawBottom: bottom - transformY,
+				};
+			}
+
+			function checkValidOverlap(e) {
+				const { y, bottom } = getNodeVerticalPos(e.target);
+				for (let i = 0; i < items.length; i++) {
+					const { rawY, rawBottom } = getNodeVerticalPos(items[i]);
+					if (!(bottom < rawY || rawBottom < y)) {
+						let overlapRatio = 0;
+						if (bottom < rawBottom) {
+							overlapRatio = (bottom - rawY) / itemHeight;
+						} else {
+							overlapRatio = (rawBottom - y) / itemHeight;
+						}
+						if (overlapRatio >= ratio) {
+							if (dragIndex !== i) {
+								dragIndex = i;
+								updateNodesPos(e);
+							}
+							i = items.length;
+						}
+					}
+				}
+			}
+
+			function updateNodesPos(e) {
+				for (let i = 0; i < items.length; i++) {
+					if (items[i] === e.target) {
+						continue;
+					}
+					const { bottom } = getNodeVerticalPos(items[i]);
+					const visualIndex = (bottom - listTop) / (itemHeight + gap) - 1;
+					if (visualIndex === dragIndex) {
+						let transformY = 0;
+						const _y = normalizeNumberValue(items[i], '--y');
+						if (_y != 0) {
+							transformY = 0;
+						} else {
+							const dir = prevDragIndex > dragIndex ? 1 /*up*/ : -1;
+							transformY = dir * (itemHeight + gap);
+						}
+						updateTranslateVars(items[i], 0, transformY);
+						prevDragIndex = dragIndex;
+						i = items.length;
+					}
+				}
+			}
+			node.addEventListener('mousedown', (e) => {
+				isPress = true;
+				items = list.querySelectorAll('.item');
+				for (let i = 0; i < items.length; i++) {
+					if (items[i] === e.target) {
+						rawNodeIndex = i;
+						i = items.length;
+					}
+				}
+				prevDragIndex = rawNodeIndex;
+				dragIndex = rawNodeIndex;
+				startX = e.clientX;
+				startY = e.clientY;
+				e.target.classList.toggle('drag');
+				list.style.setProperty('--duration', '100ms');
+			});
+
+			node.addEventListener('mousemove', (e) => {
+				if (isPress) {
+					updateTranslateVars(e.target, e.clientX - startX, e.clientY - startY);
+					checkValidOverlap(e);
+				}
+			});
+
+			node.addEventListener('mouseup', stopDrag);
+			node.addEventListener('mouseleave', stopDrag);
+		});
+	}();
+</script>
+</html>

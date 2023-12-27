@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>round-shape</title>
+	<style type="text/css">
+		* {
+			margin: 0;
+			padding: 0;
+		}
+		:root {
+			--bg-color: tan;
+		}
+		body {
+			height: 100vh;
+			display: grid;
+			place-items: center;
+		}
+		.outer-round-corner,
+		.inner-round-corner {
+			display: flex;
+			gap: 10px;
+			margin:10px 0;
+		}
+		.outer-round-corner>.box,
+		.inner-round-corner>.box {
+			width: 60px;
+			aspect-ratio: 0.75;
+			color: #fff;
+			display: flex;
+			align-items: center;
+			text-align: center;
+    		font-size: 12px;
+    		justify-content: center;
+		}
+		.outer-round-corner>.box:first-child {
+			background: var(--bg-color);
+			border-bottom-left-radius: 50% 10px;
+    		border-bottom-right-radius: 50% 10px;
+		}
+		.outer-round-corner>.box:nth-child(2) {
+			background: var(--bg-color);
+			clip-path: circle(112% at center top);
+		}
+		.outer-round-corner>.box:nth-child(3) {
+			position: relative;
+			background-image: linear-gradient(var(--bg-color) 0 100%);
+			background-size: 100% 90%;
+			background-repeat: no-repeat;
+		}
+		.outer-round-corner>.box:nth-child(3)::after {
+			position: absolute;
+			content: '';
+			width: 100%;
+			bottom: 0;
+			height: 20px;
+			border-radius: 100%;
+			background: var(--bg-color);
+		}
+		.inner-round-corner>.box {
+			position: relative;
+			overflow: hidden;
+		}
+		
+		.inner-round-corner>.box:first-child::after {
+			content: '';
+		    width: 100%;
+		    height: 20px;
+		    position: absolute;
+		    left: 0;
+		    bottom: -10px;
+		    border-radius: 100%;
+		    z-index: -1;
+		    box-shadow: 0 0 0 100px var(--bg-color);
+		}
+		.inner-round-corner>.box:nth-child(2) {
+			background-image: 
+				radial-gradient(50% 10px at center bottom, transparent 100%, var(--bg-color) 0);
+			background-position: center bottom;
+			background-repeat: no-repeat;
+		}
+		.inner-round-corner>.box:nth-child(3) {
+			background: var(--bg-color);
+			-webkit-mask: linear-gradient(red 0 100%), url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 60 60'%3E %3Ccircle r='30' cx='30' cy='30'%3E%3C/circle%3E %3C/svg%3E") 50% 250% / 100% no-repeat;
+			-webkit-mask-composite: xor;
+		}
+	</style>
+</head>
+<body>
+	<div class="wrapper">
+		<div class="outer-round-corner">
+			<div class="box">border-radius</div>
+			<div class="box">clip-path</div>
+			<div class="box">gradient</div>
+		</div>
+		<div class="inner-round-corner">
+			<div class="box">box-shadow</div>
+			<div class="box">gradient</div>
+			<div class="box">mask</div>
+		</div>
+	</div>
+</body>
+<!-- https://mp.weixin.qq.com/s/dPSINj2phmU03lYJBD06Xw -->
+</html>
